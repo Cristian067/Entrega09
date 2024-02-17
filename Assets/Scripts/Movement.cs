@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private GameObject camera;
+    [SerializeField] private GameObject camera_rot;
 
     [SerializeField] private float Speed;
     [SerializeField] private float lateralSpeed;
@@ -22,6 +23,8 @@ public class Movement : MonoBehaviour
     [SerializeField]private Vector3 checkpoint;
     [SerializeField]private Quaternion checkpoint_rot;
 
+    private GameManager gameManager;
+
 
 
 
@@ -32,6 +35,8 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        gameManager = FindObjectOfType<GameManager>();
         
     }
 
@@ -66,22 +71,24 @@ public class Movement : MonoBehaviour
 
         if(transform.position.y < -25)
         {
+            gameManager.Fall();
             transform.rotation = checkpoint_rot;
             transform.position = checkpoint;
 
         }
         
+        gameManager.ShowLifes();
 
 
         //transform.Translate(Vector3.right * lateralSpeed * Time.deltaTime * horizontalInput);
         //transform.Rotate(new Vector3(0, 1, 0) * 5);
 
-        transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
-       // camera.transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed, Space.World);
+        //transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
+        //camera_rot.transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
 
 
         //camera.transform.position = transform.position + offset;
-        camera.transform.rotation = transform.rotation;
+        //camera.transform.position = transform.position + offset;
 
         //camera.transform.rotation = transform.rotation;
 
@@ -124,6 +131,13 @@ public class Movement : MonoBehaviour
     {
         checkpoint = newCheck;
         checkpoint_rot = newCheck_rot;
+    }
+
+
+    public void Stop()
+    {
+        Speed = 0;
+        lateralSpeed = 0;
     }
 
 
