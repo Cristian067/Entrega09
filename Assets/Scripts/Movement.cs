@@ -5,8 +5,7 @@ using UnityEngine.UIElements;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private GameObject camera;
-    [SerializeField] private GameObject camera_rot;
+    
 
     [SerializeField] private float Speed;
     [SerializeField] private float lateralSpeed;
@@ -19,12 +18,13 @@ public class Movement : MonoBehaviour
 
     private bool isOnGround = false;
     public bool isOnAir = false;
+    [SerializeField] private bool isGameOver;
 
-    [SerializeField]private Vector3 checkpoint;
-    [SerializeField]private Quaternion checkpoint_rot;
+    
 
     private GameManager gameManager;
-
+    [SerializeField] private Vector3 checkPoint;
+    [SerializeField] private Quaternion checkPoint_rot;
 
 
 
@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isGameOver = false;
 
         gameManager = FindObjectOfType<GameManager>();
         
@@ -49,9 +50,16 @@ public class Movement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
 
+        if (!isGameOver)
+        {
+            transform.Translate(Vector3.forward * Speed * Time.deltaTime * verticalInput);
+            transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
 
 
-        if (isOnGround)
+        }
+
+
+        /*if (isOnGround)
         {
             Debug.Log("Ground");
             transform.Translate(Vector3.forward * Speed * Time.deltaTime * verticalInput);
@@ -66,36 +74,31 @@ public class Movement : MonoBehaviour
         if(isOnAir)
         {
             //transform.Rotate(new Vector3(40f, 0, 0)  * Time.deltaTime);
-        }
+        }*/
 
 
-        if(transform.position.y < -25)
+        if (transform.position.y < -25)
         {
             gameManager.Fall();
-            transform.rotation = checkpoint_rot;
-            transform.position = checkpoint;
+            
+           //transform.position = checkPoint;
+           // transform.rotation = checkPoint_rot;
 
         }
         
-        gameManager.ShowLifes();
+        
 
 
         //transform.Translate(Vector3.right * lateralSpeed * Time.deltaTime * horizontalInput);
         //transform.Rotate(new Vector3(0, 1, 0) * 5);
 
-        //transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
-        //camera_rot.transform.Rotate(new Vector3(0, 1, 0) * horizontalInput * lateralSpeed);
-
-
-        //camera.transform.position = transform.position + offset;
-        //camera.transform.position = transform.position + offset;
-
-        //camera.transform.rotation = transform.rotation;
+        
+        
 
 
 
     }
-
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "road")
@@ -126,18 +129,22 @@ public class Movement : MonoBehaviour
         isOnGround = false;
 
     }
-
-    public void SetCheckpoint(Vector3 newCheck, Quaternion newCheck_rot)
+    */
+    /*
+    public void GetCheckpoint(Vector3 newCheck, Quaternion newCheck_rot)
     {
-        checkpoint = newCheck;
-        checkpoint_rot = newCheck_rot;
-    }
+        //ebug.Log($"{newCheck},{newCheck_rot}");
 
+        checkPoint = newCheck;
+        checkPoint_rot = newCheck_rot;
+    }
+    */
 
     public void Stop()
     {
-        Speed = 0;
-        lateralSpeed = 0;
+        //Speed = 0;
+        isGameOver = true;
+        //lateralSpeed = 0;
     }
 
 
